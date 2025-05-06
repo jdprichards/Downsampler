@@ -1,0 +1,5 @@
+C:\Users\JDPRi\OneDrive\Desktop\Downsampler.exe
+C:\Users\JDPRi\OneDrive\Desktop\Downsampler.dll
+C:\Users\JDPRi\OneDrive\Desktop\Downsampler.deps.json
+C:\Users\JDPRi\OneDrive\Desktop\Downsampler.runtimeconfig.json
+C:\Users\JDPRi\OneDrive\Desktop\Downsampler.pdb
