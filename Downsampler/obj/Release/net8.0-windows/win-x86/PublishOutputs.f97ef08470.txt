@@ -1,5 +1,0 @@
-C:\Post University Work\ULAN\Downsampler\Executable\Downsampler.exe
-C:\Post University Work\ULAN\Downsampler\Executable\Downsampler.dll
-C:\Post University Work\ULAN\Downsampler\Executable\Downsampler.deps.json
-C:\Post University Work\ULAN\Downsampler\Executable\Downsampler.runtimeconfig.json
-C:\Post University Work\ULAN\Downsampler\Executable\Downsampler.pdb
