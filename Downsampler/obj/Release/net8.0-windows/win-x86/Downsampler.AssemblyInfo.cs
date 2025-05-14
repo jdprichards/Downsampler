@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Downsampler")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e7eddddb9b9397dd627f65a02fa46b2fdf7fcac0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+52c89bb9c8ec43dd5d79af0ce1f4628a1b371c69")]
 [assembly: System.Reflection.AssemblyProductAttribute("Downsampler")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Downsampler")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

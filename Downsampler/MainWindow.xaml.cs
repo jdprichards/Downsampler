@@ -105,16 +105,49 @@ namespace Downsampler
         private async void clkDownsample(object sender, RoutedEventArgs e)
         {
             ProgressGrid.Visibility = Visibility.Visible;
-
+            btnDownsample.IsEnabled = false;
 
             if (chkDownsampleFolder.IsChecked == false)
             {
-                Task.Run(() => DownsampleFileAsync(_fileModel.InputFile));
+                await Task.Run(async () => 
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        _fileModel.FileComplete = 0;
+                        _fileModel.FileAmount = 1;
+
+                        _fileModel.FileCompleteRatio = _fileModel.FileComplete + "/" + _fileModel.FileAmount;
+                        _fileModel.FilePercentage = ((float)_fileModel.FileComplete / (float)_fileModel.FileAmount) * 100.0f;
+                        _fileModel.FilePercentageString = Math.Round(_fileModel.FilePercentage, 2) + "%";
+                    });
+
+                    await DownsampleFileAsync(_fileModel.InputFile);
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        _fileModel.FileComplete = 1;
+
+                        _fileModel.FileCompleteRatio = _fileModel.FileComplete + "/" + _fileModel.FileAmount;
+                        _fileModel.FilePercentage = ((float)_fileModel.FileComplete / (float)_fileModel.FileAmount) * 100.0f;
+                        _fileModel.FilePercentageString = Math.Round(_fileModel.FilePercentage, 2) + "%";
+
+                        btnDownsample.IsEnabled = true;
+                    });
+                });
+                
             }
 
             else
             {
-                Task.Run(() => DownsampleAsync());
+                await Task.Run(async() => 
+                {
+                    await DownsampleAsync();
+
+                    Dispatcher.Invoke(() =>
+                    {
+                        btnDownsample.IsEnabled = true;
+                    });
+                });
             }
 
         }
@@ -124,12 +157,15 @@ namespace Downsampler
         {
             var files = Directory.GetFiles(_fileModel.InputFile);
 
-            _fileModel.FileComplete = 0;
-            _fileModel.FileAmount = files.Length;
+            Dispatcher.Invoke(() =>
+            {
+                _fileModel.FileComplete = 0;
+                _fileModel.FileAmount = files.Length;
 
-            _fileModel.FileCompleteRatio = _fileModel.FileComplete + "/" + _fileModel.FileAmount;
-            _fileModel.FilePercentage = ((float)_fileModel.FileComplete / (float)_fileModel.FileAmount) * 100.0f;
-            _fileModel.FilePercentageString = Math.Round(_fileModel.FilePercentage, 2) + "%";
+                _fileModel.FileCompleteRatio = _fileModel.FileComplete + "/" + _fileModel.FileAmount;
+                _fileModel.FilePercentage = ((float)_fileModel.FileComplete / (float)_fileModel.FileAmount) * 100.0f;
+                _fileModel.FilePercentageString = Math.Round(_fileModel.FilePercentage, 2) + "%";
+            });
 
             foreach (string file in files)
             {
@@ -144,6 +180,7 @@ namespace Downsampler
                     _fileModel.FilePercentageString = Math.Round(_fileModel.FilePercentage, 2) + "%";
                 });
 
+                _fileModel.RowComplete = 0;
             }
         }
 
@@ -151,42 +188,38 @@ namespace Downsampler
         {
             try
             {
-                _fileModel.FileComplete = 0;
-                _fileModel.FileAmount = 1;
 
                 _fileModel.RowAmount = File.ReadLines(file).Count();
 
                 StreamReader sr = new StreamReader(file);
-                String line = sr.ReadLine();
+                string line = sr.ReadLine();
                 string filename = file.Split("\\").Last();
                 filename = filename.Split(".").First();
-                StreamWriter sw = new StreamWriter(_fileModel.OutputFolder + "\\" + filename + " Output.csv");
+                StreamWriter sw = new StreamWriter(_fileModel.OutputFolder + "\\" + filename + " (Downsampled).csv");
                 sw.WriteLine(line);
                 _fileModel.RowComplete++;
 
                 float[] totals = new float[line.Split(",").Length - 1];
 
                 int i = 1;
-                int index = 1;
-                int ratio = 20;
+                int index = 0;
+                int ratio = 40;
 
                 string writeLine = "";
 
                 line = sr.ReadLine();
-                while (line != null)
+                do
                 {
-
                     string[] splitLine = line.Split(",");
 
-                    for (int j = 1; j <= totals.Length; j++)
+                    for (int j = 1; j < splitLine.Length; j++)
                     {
                         totals[j - 1] += float.Parse(splitLine[j]);
                     }
 
-                    if (i >= ratio)
+                    if (i == ratio)
                     {
                         writeLine = index + ",";
-                        //sw.Write(index + ",");
                         for (int j = 0; j < totals.Length; j++)
                         {
                             float average = totals[j] / ratio;
@@ -197,7 +230,7 @@ namespace Downsampler
                         }
 
                         sw.WriteLine(writeLine);
-                        i = 0;
+                        i = 1;
                         index++;
                         totals = new float[totals.Length];
                         writeLine = "";
@@ -206,8 +239,6 @@ namespace Downsampler
                     {
                         i++;
                     }
-
-
 
                     Dispatcher.Invoke(() =>
                     {
@@ -220,15 +251,28 @@ namespace Downsampler
 
 
                     line = sr.ReadLine();
+                } while (line != null);
+
+                writeLine = index + ",";
+                for (int j = 0; j < totals.Length; j++)
+                {
+                    float average = totals[j] / (i - 1);
+                    writeLine += average;
+                    if (j < totals.Length - 1)
+                        writeLine += ",";
                 }
+
+                sw.WriteLine(writeLine);
 
                 sw.Close();
                 sr.Close();
 
+                int testend = i;
+
             }
             catch (Exception ex)
             {
-
+                Exception exception = ex;
             }
         }
     }
