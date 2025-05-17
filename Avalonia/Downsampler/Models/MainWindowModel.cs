@@ -29,6 +29,8 @@ namespace Downsampler.Models
         private string _filePercentageString;
         private string _rowPercentageString;
 
+        private int _downsampleRate = 40;
+
         private bool _hideProgress = true;
         private bool _disableDownsample = false;
 
@@ -103,6 +105,12 @@ namespace Downsampler.Models
         {
             get => _rowPercentageString;
             set => SetProperty(ref _rowPercentageString, value);
+        }
+
+        public int DownsampleRate
+        {
+            get => _downsampleRate;
+            set => SetProperty(ref _downsampleRate, value);
         }
 
         public bool HideProgress

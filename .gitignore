@@ -3,9 +3,11 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# LaTeX Userguide
+*User guide
 
 # exe files
-*.exe
+#*.exe
 # dotenv files
 .env
 

@@ -136,7 +136,7 @@ namespace Downsampler.ViewModels
                 string line = sr.ReadLine();
                 string filename = file.Split("\\").Last();
                 filename = filename.Split(".").First();
-                StreamWriter sw = new StreamWriter(windowModel.OutputFolder + "\\" + filename + " (Downsampled).csv");
+                StreamWriter sw = new StreamWriter(windowModel.OutputFolder + "\\" + filename + " (Downsampled - Rate:" + windowModel.DownsampleRate + " .csv");
                 sw.WriteLine(line);
                 windowModel.RowComplete++;
 
@@ -144,7 +144,7 @@ namespace Downsampler.ViewModels
 
                 int i = 1;
                 int index = 0;
-                int ratio = 40;
+                int ratio = windowModel.DownsampleRate;
 
                 string writeLine = "";
 
