@@ -228,7 +228,6 @@
 								Margin="5"
 								FontSize="11"/>
 
-
 						<Button Name="btnImportSearchFolder"
 								Command="{Binding ClkImportSearchFolder}"
 								Content="Search Folder"

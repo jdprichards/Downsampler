@@ -19,7 +19,6 @@ namespace Downsampler.ViewModels
     {
         public MainWindowModel windowModel { get; set; } = new MainWindowModel();
 
-        
         public async Task<string> OpenOSDialog_ReturnString(bool boolFile)
         {
             
@@ -136,7 +135,7 @@ namespace Downsampler.ViewModels
                 string line = sr.ReadLine();
                 string filename = file.Split("\\").Last();
                 filename = filename.Split(".").First();
-                StreamWriter sw = new StreamWriter(windowModel.OutputFolder + "\\" + filename + " (Downsampled - Rate:" + windowModel.DownsampleRate + " .csv");
+                StreamWriter sw = new StreamWriter(windowModel.OutputFolder + "\\" + filename + " (Downsampled Rate - " + windowModel.DownsampleRate.ToString() + ").csv");
                 sw.WriteLine(line);
                 windowModel.RowComplete++;
 
